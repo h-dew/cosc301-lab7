@@ -1,0 +1,80 @@
+---
+title: "Aubrey_Scown-62071873-lab7"
+output: html_notebook
+
+# Question 1
+
+## Part 1
+```{r}
+library(dplyr)
+
+sensordata <- read.csv("sensor.csv",
+                       header = TRUE, sep = ",")
+
+sensordata$value <- as.numeric(sensordata$value)
+
+head(sensordata, 10)
+```
+
+## Part 2
+```{r}
+sensors_clean <- sensordata
+
+sensors_clean <- subset(sensors_clean, value >= 0 & value <= 100)
+
+tail(sensors_clean)
+```
+
+## Part 3
+```{r}
+data_summary <- list(minread = min(as.numeric(sensors_clean$value)),
+  meanread = mean(sensors_clean$value),
+  rangeread = range(sensors_clean$value),
+  maxcleanread = max(sensors_clean$value),
+  s1_s2_readcount = length(sensordata$siteid[lapply(sensordata$siteid, length) == 1  
+            | lapply(sensordata$siteid, length) == 2]))
+
+tail(data_summary,5)
+```
+
+## Part 4
+```{r}
+sensorvalues <- as.numeric(sensors_clean$value)
+
+hist(sensorvalues,
+main = "Histogram of values",
+xlab = "Values")
+
+boxplot(value~sensorid,
+data = sensors_clean,
+main = "Sensor values by sensor")
+```
+
+# Question 2
+- Null Hypothesis:
+  - It is inconclusive whether or not the mean value of all sensor readings is less than 45
+- Alternative Hypothesis:
+  - The mean value of all sensor readings is less than 45.
+  
+```{r}
+t.test(sensorvalues,
+alternative = "less",
+mu = 45)
+```
+
+The null hypothesis is rejected, there is sufficient evidence to conclude that the mean of cleaned sensor readings is below 54.
+
+# Question 3
+- Null Hypothesis:
+  - There is no statistically significant difference between the values observed at site 1 and 2
+- Alternative Hypothesis:
+  - There is a statistically significant difference between the values observed at site 1 and 2
+  
+```{r}
+s1_s2_sensors <- subset(sensors_clean, siteid == 1 | siteid == 2)
+
+t.test(value ~ siteid, 
+data = s1_s2_sensors)
+```
+
+The null hypothesis is rejected, there is sufficient evidence to conclude that there is a difference between the values observed at sites 1 and 2
