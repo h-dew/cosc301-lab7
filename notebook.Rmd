@@ -1,13 +1,11 @@
 ---
-title: "Aubrey_Scown-62071873-lab7"
-output: html_notebook
+name: Aubrey Scown </br>
+sn: 62071873
 
 # Question 1
 
 ## Part 1
 ```{r}
-library(dplyr)
-
 sensordata <- read.csv("sensor.csv",
                        header = TRUE, sep = ",")
 
@@ -78,3 +76,21 @@ data = s1_s2_sensors)
 ```
 
 The null hypothesis is rejected, there is sufficient evidence to conclude that there is a difference between the values observed at sites 1 and 2
+
+# Question 4
+```{r}
+advertising <- read.csv("advertising.csv", 
+                        header = TRUE, sep = ",")
+                        
+tail(advertising, 15)
+
+plot(advertising$Radio, advertising$Sales)
+plot(advertising$Newspaper, advertising$Sales)
+plot(advertising$TV, advertising$Sales)
+
+tvsales_lm <- lm(Sales ~ TV, advertising)
+
+summary(tvsales_lm)
+
+abline(tvsales_lm, col="red")
+```
